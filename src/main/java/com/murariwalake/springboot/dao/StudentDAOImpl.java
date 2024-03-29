@@ -23,21 +23,14 @@ public class StudentDAOImpl implements StudentDAO {
 
 	@Override
 	public StudentEntity getStudentById(Long studentId) {
-		try {
-			return entityManager.createQuery("SELECT s FROM StudentEntity s WHERE s.id = :id", StudentEntity.class)
-					.setParameter("id", studentId)
-					.getSingleResult();
-		} catch (NoResultException e) {
-			return null; // Return null if no student found with the provided ID
-		}
+		return entityManager.find(StudentEntity.class, studentId);
 	}
 
 
 	@Override
 	@Transactional
 	public StudentEntity addStudent(StudentEntity student) {
-		entityManager.persist(student);
-		return student;
+		return entityManager.merge(student);
 	}
 
 	@Override
