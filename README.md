@@ -12,29 +12,21 @@ This project implements a RESTful API for managing student resources, including 
 - [Technologies Used](#technologies-used)
 
 ## Introduction
+This project implements spring data rest. It just works out of the box. It provides a lot of features like pagination, sorting, filtering, etc. It also provides a lot of customization options.
+For basic all we need is to create an entity and extend the CrudRepository interface. It will provide all the basic CRUD operations.
 
-The Student Management REST API provides endpoints to perform CRUD operations on student resources. It includes functionalities to retrieve all students, get a student by ID, add a new student, update an existing student, and delete a student.
+No need to create a controller, service, and repository classes. It will automatically create the endpoints for the entity.
 
-## Project Structure
-
-The project follows the standard Spring Boot structure:
-
-- `src/main/java`: Contains Java source code
-   - `com.murariwalake.springboot.controller`: Controller classes handling HTTP requests
-   - `com.murariwalake.springboot.model`: Model classes representing student data
-   - `com.murariwalake.springboot.service`: Service classes containing business logic
-- `src/main/resources`: Contains application properties and configuration files
-- `pom.xml`: Maven project configuration file
 
 ## API Endpoints
 
 The following API endpoints are available:
 
-- **GET /api/v1/students**: Get all students
-- **GET /api/v1/students/{studentId}**: Get student by ID
-- **POST /api/v1/students**: Add a new student
-- **PUT /api/v1/students/{studentId}**: Update an existing student
-- **DELETE /api/v1/students/{studentId}**: Delete a student by ID
+- **GET /students**: Get all students
+- **GET /students/{studentId}**: Get student by ID
+- **POST /students**: Add a new student
+- **PUT /students/{studentId}**: Update an existing student
+- **DELETE /students/{studentId}**: Delete a student by ID
 
 ## Setup Instructions
 
