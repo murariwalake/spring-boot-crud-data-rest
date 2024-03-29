@@ -1,0 +1,120 @@
+{
+  "info": {
+    "_postman_id": "uuid",
+    "name": "Student API2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Students",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/students",
+          "protocol": "http",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "students"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Student by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/students/{{studentId}}",
+          "protocol": "http",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "students",
+            "{{studentId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Student",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"id\":1,\"name\":\"John Doe\",\"email\":\"john@example.com\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/students",
+          "protocol": "http",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "students"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Student",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"id\":1,\"name\":\"John Doe\",\"email\":\"john@example.com\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/students/{{studentId}}",
+          "protocol": "http",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "students",
+            "{{studentId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Student",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/students/{{studentId}}",
+          "protocol": "http",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "students",
+            "{{studentId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
