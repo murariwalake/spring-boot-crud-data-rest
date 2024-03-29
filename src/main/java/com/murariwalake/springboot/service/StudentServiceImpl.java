@@ -1,9 +1,10 @@
 package com.murariwalake.springboot.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.murariwalake.springboot.dao.StudentDAO;
+import com.murariwalake.springboot.dao.StudentRepository;
 import com.murariwalake.springboot.entity.StudentEntity;
 import com.murariwalake.springboot.exception.StudentClientException;
 import com.murariwalake.springboot.model.StudentGET;
@@ -15,50 +16,50 @@ import org.springframework.stereotype.Service;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-	private final StudentDAO studentDAO;
+	private final StudentRepository studentRepository;
 	private final ObjectMapper objectMapper;
 
-	public StudentServiceImpl(final StudentDAO studentDAO, final ObjectMapper objectMapper) {
-		this.studentDAO = studentDAO;
+	public StudentServiceImpl(final StudentRepository studentDAO, final ObjectMapper objectMapper) {
+		this.studentRepository = studentDAO;
 		this.objectMapper = objectMapper;
 	}
 
 	@Override
 	public List<StudentGET> getAllStudents() {
-		return objectMapper.convertValue(studentDAO.getAllStudents(), objectMapper.getTypeFactory().constructCollectionType(List.class, StudentGET.class));
+		return objectMapper.convertValue(studentRepository.findAll() , objectMapper.getTypeFactory().constructCollectionType(List.class, StudentGET.class));
 	}
 
 	@Override
 	public StudentGET getStudentById(Long studentId) {
-		return objectMapper.convertValue(getStudentEntityById(studentId), StudentGET.class);
+		return objectMapper.convertValue(findStudentEntityById(studentId), StudentGET.class);
 	}
 
-	private StudentEntity getStudentEntityById(Long studentId) {
-		StudentEntity studentEntity = studentDAO.getStudentById(studentId);
-		if (studentEntity == null) {
+	private StudentEntity findStudentEntityById(Long studentId) {
+		Optional<StudentEntity> studentEntity = studentRepository.findById(studentId);
+		if (!studentEntity.isPresent()) {
 			throw new StudentClientException("Student with id " + studentId + " not found", HttpStatus.NOT_FOUND);
 		}
-		return studentEntity;
+		return studentEntity.get();
 	}
 
 	@Override
 	public StudentGET addStudent(StudentPOST student) {
 		checkIfEmailIsAlreadyInUse(student.getEmail());
 		StudentEntity studentEntity = objectMapper.convertValue(student, StudentEntity.class);
-		return objectMapper.convertValue(studentDAO.addStudent(studentEntity), StudentGET.class);
+		return objectMapper.convertValue(studentRepository.save(studentEntity), StudentGET.class);
 	}
 
 	private void checkIfEmailIsAlreadyInUse(String email) {
-		if (studentDAO.getStudentByEmail(email) != null) {
+		if (studentRepository.findStudentByEmail(email) != null) {
 			throw new StudentClientException("Email " + email + "is already in use", HttpStatus.CONFLICT);
 		}
 	}
 
 	@Override
 	public StudentGET updateStudent(Long studentId, StudentPUT studentPUT) {
-		StudentEntity studentEntity = getStudentEntityById(studentId);
+		StudentEntity studentEntity = findStudentEntityById(studentId);
 		
-		StudentEntity studentEntityByEmailId = studentDAO.getStudentByEmail(studentPUT.getEmail());
+		StudentEntity studentEntityByEmailId = studentRepository.findStudentByEmail(studentPUT.getEmail());
 		if (studentEntityByEmailId != null && !studentEntityByEmailId.getId().equals(studentId)) {
 			throw new StudentClientException("Email " + studentPUT.getEmail() + " is already in use", HttpStatus.CONFLICT);
 		}
@@ -71,12 +72,12 @@ public class StudentServiceImpl implements StudentService {
 			studentEntity.setEmail(studentPUT.getEmail());
 		}
 		
-		return objectMapper.convertValue(studentDAO.updateStudent(studentEntity), StudentGET.class);
+		return objectMapper.convertValue(studentRepository.save(studentEntity), StudentGET.class);
 	}
 
 	@Override
 	public void deleteStudent(Long studentId) {
-		getStudentEntityById(studentId);
-		studentDAO.deleteStudent(studentId);
+		findStudentEntityById(studentId);
+		studentRepository.deleteById(studentId);
 	}
 }
